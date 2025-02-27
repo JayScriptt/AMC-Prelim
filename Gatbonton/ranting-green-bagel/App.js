@@ -1,43 +1,58 @@
-import React, { useState } from 'react';
-import { Text, SafeAreaView, StyleSheet, TextInput, Button, View } from 'react-native';
 
-// You can import supported modules from npm
-import { Card } from 'react-native-paper';
+import React, { useState } from "react";
+import { StyleSheet, Text, View, TextInput, Button, FlatList } from "react-native";
 
-// or any files within the Snack
-import AssetExample from './components/AssetExample';
 export default function App() {
-   const [goal, setGoal] = useState({});
-  return (
-    <SafeAreaView style={styles.container}>
-      <Text style={styles.paragraph}>
-        Prelim  Activity
-      </Text>
-        <TextInput style={styles.input} placeholder="My Goal"/> 
-      <Button title="SUBMIT" />
+  const [enterGoal, setEnterGoal] = useState("");
+  const [goals, setGoals] = useState([]);
+const Colors = ['lightblue', 'lightgreen', 'royalblue', 'gold', 'plum', 'skyblue', 'lightyellow', 'peachpuff', 'mistyrose'];
 
-    </SafeAreaView>
+  const submitGoal = () => {
+    if (enterGoal.trim().length === 0) return;
+    setGoals((currentGoals) => [...currentGoals, { key: Math.random().toString(), value: enterGoal }]);
+    setEnterGoal("");
+  };
+
+  return (
+    <View style={styles.container}>
+      <TextInput
+        placeholder="My Goal"
+        style={styles.input}
+        onChangeText={setEnterGoal}
+        value={enterGoal}
+      />
+      <Button title="ADD" onPress={submitGoal} />
+      <FlatList
+        data={goals}
+        renderItem={(itemData) => (
+          <View style={styles.goalItem}>
+            <Text style={styles.goalText}>{itemData.item.value}</Text>
+          </View>
+        )}
+      />
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    marginTop: '10%',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  paragraph: {
-    margin: 24,
-    fontSize: 18,
-    fontWeight: 'bold',
-    textAlign: 'center',
-  },
+container: {
+  marginTop: '20%',
+  padding: 50,
+flex: 1,
+},
   input: {
-    height: 40,
+       height: 40,
     margin: 12,
     borderWidth: 1,
     padding: 10,
   },
-
-
+  goalItem: {
+    backgroundColor: "aqua",
+    padding: 10,
+    marginVertical: 5,
+  },
+  goalText: {
+    color: "white",
+    fontWeight: "bold",
+  },
 });
